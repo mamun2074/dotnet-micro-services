@@ -6,7 +6,7 @@ namespace Catalog.API.Products.GetProducts;
 //public record GetProductsRequest();
 public record GetProductsResponse(IEnumerable<Product> Products);
 
-public class GetProductsHandler : ICarterModule
+public class GetProductsEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
@@ -17,7 +17,7 @@ public class GetProductsHandler : ICarterModule
             return Results.Ok(response);
         })
         .WithName("GetProducts")
-        .Produces<CreateProductResponse>(StatusCodes.Status201Created)
+        .Produces<CreateProductResponse>(StatusCodes.Status200OK)
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("Get Products")
         .WithDescription("Get Products");
