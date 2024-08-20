@@ -29,12 +29,16 @@ if (builder.Environment.IsDevelopment())
 // add custome exception handler
 builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
+// Helth check
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 // configure the http request pipeline
 app.MapCarter();
 
 // configure exception option
 app.UseExceptionHandler(option => { });
-
+// helth check
+app.UseHealthChecks("/health");
 
 app.Run();
