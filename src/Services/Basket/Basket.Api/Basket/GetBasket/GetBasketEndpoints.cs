@@ -18,6 +18,5 @@ public class GetBasketEndpoints : ICarterModule
         .ProducesProblem(StatusCodes.Status400BadRequest)
         .WithSummary("get-basket-by-user-name")
         .WithDescription("get-basket-by-user-name");
-        throw new NotImplementedException();
     }
 }
