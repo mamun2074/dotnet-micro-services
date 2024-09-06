@@ -10,7 +10,8 @@ public class StoreBasketEndpoints : ICarterModule
     {
         app.MapPost("/basket", async (StroeBasketRequest request, ISender sender) =>
         {
-            var result = await sender.Send(request);
+            var command = request.Adapt<StroeBasketCommand>();
+            var result = await sender.Send(command);
             var response = result.Adapt<StroeBasketResponse>();
             return Results.Created($"/basket/{response.UserName}", response);
         })
