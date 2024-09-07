@@ -1,3 +1,5 @@
+using HealthChecks.UI.Client;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container
@@ -18,12 +20,29 @@ builder.Services.AddMarten(opts =>
     opts.Schema.For<ShoppingCart>().Identity(x => x.UserName);
 }).UseLightweightSessions();
 
+// repository dependency added
+builder.Services.AddScoped<IBasketRepository, BasketRepository>();
 
+// add custome exception handler
+builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
+// Helth check
+builder.Services.AddHealthChecks()
+    .AddNpgSql(builder.Configuration.GetConnectionString("Database")!);
 
 var app = builder.Build();
 
+// configure exception option
+app.UseExceptionHandler(option => { });
+
 // configure the http request pipeline
 app.MapCarter();
+
+// helth check
+app.UseHealthChecks("/health",
+    new HealthCheckOptions
+    {
+        ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
+    });
 
 app.Run();

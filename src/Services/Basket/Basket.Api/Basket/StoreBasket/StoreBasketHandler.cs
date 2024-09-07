@@ -14,7 +14,7 @@ public class StoreBasketCommandValidator : AbstractValidator<StroeBasketCommand>
     }
 }
 
-public class StoreBasketCommandHandler : IComandHandler<StroeBasketCommand, StroeBasketResult>
+public class StoreBasketCommandHandler(IBasketRepository _basketRepository) : IComandHandler<StroeBasketCommand, StroeBasketResult>
 {
     public async Task<StroeBasketResult> Handle(StroeBasketCommand comand, CancellationToken cancellationToken)
     {
@@ -22,7 +22,7 @@ public class StoreBasketCommandHandler : IComandHandler<StroeBasketCommand, Stro
 
         // Todo: store basket in database (use Maren upsert - if exist then update, if not exist create;
         // Todo: update cache
-
-        return new StroeBasketResult("korim");
+        await _basketRepository.StoreBasket(comand.Cart, cancellationToken);
+        return new StroeBasketResult(comand.Cart.UserName);
     }
 }
